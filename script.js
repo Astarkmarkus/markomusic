@@ -133,7 +133,16 @@ async function initPreview() {
   audio.addEventListener("error", () => { section.hidden = true; audio.pause(); });
 }
 
+/** Remove ChatGPT's referral tag from the visible URL without reloading the page. */
+function cleanReferralUrl() {
+  const url = new URL(window.location.href);
+  if (url.searchParams.get("utm_source") !== "chatgpt.com") return;
+  url.searchParams.delete("utm_source");
+  window.history.replaceState(window.history.state, "", url.pathname + url.search + url.hash);
+}
+
 function init() {
+  cleanReferralUrl();
   initPlatforms();
   initReleaseStatus();
   initReveal();
