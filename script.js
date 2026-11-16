@@ -36,6 +36,16 @@ function applyReleaseCopy() {
   if (heroTitle?.firstChild) heroTitle.firstChild.textContent = RELEASE.title;
   const heroDate = document.querySelector(".hero-release");
   if (heroDate) heroDate.textContent = RELEASE.dateShort;
+  const headerDate = document.querySelector(".header-label");
+  if (headerDate && headerDate.lastChild) headerDate.lastChild.textContent = " " + RELEASE.dateShort;
+  const verticalDate = document.querySelector(".hero-vertical--right");
+  if (verticalDate) verticalDate.textContent = RELEASE.dateShort;
+  const bottomDate = document.querySelector(".hero-bottom span:last-child");
+  if (bottomDate) bottomDate.textContent = RELEASE.dateShort;
+  const fallbackDate = document.querySelector(".fallback-date");
+  if (fallbackDate) fallbackDate.textContent = RELEASE.dateShort;
+  const fallbackTitle = document.querySelector(".fallback-title");
+  if (fallbackTitle) fallbackTitle.textContent = RELEASE.title;
   const releaseTitle = $("release-title");
   if (releaseTitle) releaseTitle.textContent = RELEASE.title;
   const dateLong = document.querySelector(".release-date-large");
