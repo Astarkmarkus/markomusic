@@ -15,6 +15,101 @@ const MARKO = Object.freeze({
   }
 });
 
+
+// Interface translations. Artist and release names remain unchanged.
+const I18N = Object.freeze({
+  en: {
+    skip:"Skip to content",backToTop:"MARKO — Back to top",mainNav:"Main navigation",navReleases:"RELEASES",
+    instagramLabel:"MARKO on Instagram",languageLabel:"Choose website language",
+    officialWebsite:"THE OFFICIAL WEBSITE",exploreMusic:"EXPLORE MUSIC",scrollDiscover:"SCROLL TO DISCOVER ↓",
+    platformIntro:"MUSIC PLATFORMS · LINKS COMING SOON",platformAll:"LISTEN TO MARKO",platformPartial:"MUSIC PLATFORMS · MORE LINKS COMING SOON",
+    spotifySoon:"Spotify — coming soon",appleMusicSoon:"Apple Music — coming soon",soundcloudSoon:"SoundCloud — coming soon",
+    spotifyLink:"Spotify — MARKO",appleMusicLink:"Apple Music — MARKO",soundcloudLink:"SoundCloud — MARKO",
+    music:"MUSIC",latest:"LATEST",releases:"RELEASES",discography:"MARKO / DISCOGRAPHY",
+    cardSingle:"01 / SINGLE",newSingle:"NEW SINGLE",comingSoon:"COMING SOON",previewArrow:"PREVIEW ↗",
+    cardEp:"02 / EP",upcomingEp:"UPCOMING EP",epDate:"RELEASE DATE: TBD",inMaking:"IN THE MAKING",noArtwork:"NO ARTWORK YET",
+    listenFirst:"LISTEN FIRST",preview:"PREVIEW",contact:"CONTACT",emailMarko:"Email MARKO at hello@markomusic.art",
+    outNow:"OUT NOW",listenArrow:"LISTEN ↗",preSaveArrow:"PRE-SAVE ↗",
+    playBella:"Play BELLA preview",pauseBella:"Pause BELLA preview"
+  },
+  es: {
+    skip:"Ir al contenido",backToTop:"MARKO — Volver arriba",mainNav:"Navegación principal",navReleases:"LANZAMIENTOS",
+    instagramLabel:"MARKO en Instagram",languageLabel:"Elegir idioma del sitio web",
+    officialWebsite:"WEB OFICIAL",exploreMusic:"DESCUBRE LA MÚSICA",scrollDiscover:"BAJA PARA DESCUBRIR ↓",
+    platformIntro:"PLATAFORMAS · ENLACES PRÓXIMAMENTE",platformAll:"ESCUCHA A MARKO",platformPartial:"PLATAFORMAS · MÁS ENLACES PRÓXIMAMENTE",
+    spotifySoon:"Spotify — próximamente",appleMusicSoon:"Apple Music — próximamente",soundcloudSoon:"SoundCloud — próximamente",
+    spotifyLink:"Spotify — MARKO",appleMusicLink:"Apple Music — MARKO",soundcloudLink:"SoundCloud — MARKO",
+    music:"MÚSICA",latest:"ÚLTIMOS",releases:"LANZAMIENTOS",discography:"MARKO / DISCOGRAFÍA",
+    cardSingle:"01 / SENCILLO",newSingle:"NUEVO SENCILLO",comingSoon:"MUY PRONTO",previewArrow:"ADELANTO ↗",
+    cardEp:"02 / EP",upcomingEp:"PRÓXIMO EP",epDate:"FECHA: POR CONFIRMAR",inMaking:"EN PREPARACIÓN",noArtwork:"PORTADA POR REVELAR",
+    listenFirst:"ESCUCHA UN ADELANTO",preview:"ADELANTO",contact:"CONTACTO",emailMarko:"Enviar un correo a MARKO: hello@markomusic.art",
+    outNow:"YA DISPONIBLE",listenArrow:"ESCUCHAR ↗",preSaveArrow:"PRE-GUARDAR ↗",
+    playBella:"Reproducir adelanto de BELLA",pauseBella:"Pausar adelanto de BELLA"
+  },
+  ca: {
+    skip:"Ves al contingut",backToTop:"MARKO — Torna a dalt",mainNav:"Navegació principal",navReleases:"LLANÇAMENTS",
+    instagramLabel:"MARKO a Instagram",languageLabel:"Tria l'idioma del web",
+    officialWebsite:"WEB OFICIAL",exploreMusic:"DESCOBREIX LA MÚSICA",scrollDiscover:"DESPLAÇA'T PER DESCOBRIR ↓",
+    platformIntro:"PLATAFORMES · ENLLAÇOS AVIAT",platformAll:"ESCOLTA MARKO",platformPartial:"PLATAFORMES · MÉS ENLLAÇOS AVIAT",
+    spotifySoon:"Spotify — pròximament",appleMusicSoon:"Apple Music — pròximament",soundcloudSoon:"SoundCloud — pròximament",
+    spotifyLink:"Spotify — MARKO",appleMusicLink:"Apple Music — MARKO",soundcloudLink:"SoundCloud — MARKO",
+    music:"MÚSICA",latest:"ÚLTIMS",releases:"LLANÇAMENTS",discography:"MARKO / DISCOGRAFIA",
+    cardSingle:"01 / SENZILL",newSingle:"NOU SENZILL",comingSoon:"AVIAT",previewArrow:"AVANÇAMENT ↗",
+    cardEp:"02 / EP",upcomingEp:"PRÒXIM EP",epDate:"DATA: PER CONFIRMAR",inMaking:"EN PREPARACIÓ",noArtwork:"PORTADA ENCARA NO DISPONIBLE",
+    listenFirst:"ESCOLTA'N UN AVANÇAMENT",preview:"AVANÇAMENT",contact:"CONTACTE",emailMarko:"Envia un correu a MARKO: hello@markomusic.art",
+    outNow:"JA DISPONIBLE",listenArrow:"ESCOLTA ↗",preSaveArrow:"DESA ANTICIPADAMENT ↗",
+    playBella:"Reprodueix l'avançament de BELLA",pauseBella:"Pausa l'avançament de BELLA"
+  }
+});
+
+let activeLanguage = "en";
+const translate = key => I18N[activeLanguage][key] || I18N.en[key] || key;
+
+function applyLanguage(code = activeLanguage) {
+  if (!Object.hasOwn(I18N, code)) code = "en";
+  activeLanguage = code;
+  document.documentElement.lang = code;
+
+  const platformText = document.querySelector(".platform-intro");
+  if (platformText) {
+    const count = Number(platformText.dataset.connectedPlatforms || 0);
+    platformText.dataset.i18n = count === 3 ? "platformAll" : count > 0 ? "platformPartial" : "platformIntro";
+  }
+  const toggle = document.getElementById("audio-toggle");
+  const audio = document.getElementById("bella-audio");
+  if (toggle && audio) toggle.dataset.i18nAriaLabel = !audio.paused && !audio.ended ? "pauseBella" : "playBella";
+
+  document.querySelectorAll("[data-i18n]").forEach(element => {
+    element.textContent = translate(element.dataset.i18n);
+  });
+  document.querySelectorAll("[data-i18n-aria-label]").forEach(element => {
+    element.setAttribute("aria-label", translate(element.dataset.i18nAriaLabel));
+  });
+  document.querySelectorAll(".language-choice").forEach(button => {
+    const selected = button.dataset.lang === code;
+    button.classList.toggle("is-active", selected);
+    button.setAttribute("aria-pressed", String(selected));
+  });
+}
+
+function initLanguage() {
+  let saved = null;
+  try { saved = window.localStorage.getItem("marko-language"); } catch {}
+  const browser = (navigator.languages || [navigator.language || "en"])
+    .map(language => String(language).toLowerCase().split("-")[0])
+    .find(language => language === "ca" || language === "es");
+  applyLanguage(saved && Object.hasOwn(I18N,saved) ? saved : (browser || "en"));
+
+  document.querySelectorAll(".language-choice").forEach(button => {
+    button.addEventListener("click", () => {
+      const code = button.dataset.lang;
+      if (!Object.hasOwn(I18N,code)) return;
+      try { window.localStorage.setItem("marko-language",code); } catch {}
+      applyLanguage(code);
+    });
+  });
+}
+
 const $ = (id) => document.getElementById(id);
 const allowedUrl = (value) => {
   if (!value) return null;
@@ -35,15 +130,15 @@ function initPlatforms() {
     anchor.href = url;
     anchor.target = "_blank";
     anchor.rel = "noopener noreferrer";
-    anchor.setAttribute("aria-label", `${service === "appleMusic" ? "Apple Music" : service === "soundcloud" ? "SoundCloud" : "Spotify"} — MARKO`);
+    anchor.dataset.i18nAriaLabel = service + "Link";
+    anchor.setAttribute("aria-label", translate(anchor.dataset.i18nAriaLabel));
     anchor.innerHTML = element.innerHTML;
     element.replaceWith(anchor);
     linked++;
   }
   const label = document.querySelector(".platform-intro");
-  if (label && linked > 0) {
-    label.textContent = linked === 3 ? "LISTEN TO MARKO" : "MUSIC PLATFORMS · MORE LINKS COMING SOON";
-  }
+  if (label) label.dataset.connectedPlatforms = String(linked);
+  applyLanguage();
 }
 
 function initReleaseStatus() {
@@ -51,12 +146,12 @@ function initReleaseStatus() {
   const action = $("bella-audio-anchor");
   if (!label || !action) return;
   if (MARKO.bella.status === "out-now") {
-    label.textContent = "OUT NOW";
+    label.dataset.i18n = "outNow";
     const link = allowedUrl(MARKO.platforms.spotify) || allowedUrl(MARKO.platforms.appleMusic) || allowedUrl(MARKO.platforms.soundcloud);
     if (link) {
       action.hidden = false;
       action.href = link;
-      action.textContent = "LISTEN ↗";
+      action.dataset.i18n = "listenArrow";
       action.target = "_blank";
       action.rel = "noopener noreferrer";
     }
@@ -65,7 +160,7 @@ function initReleaseStatus() {
     if (presave) {
       action.hidden = false;
       action.href = presave;
-      action.textContent = "PRE-SAVE ↗";
+      action.dataset.i18n = "preSaveArrow";
       action.target = "_blank";
       action.rel = "noopener noreferrer";
     }
@@ -111,7 +206,8 @@ async function initPreview() {
     action.href = "#audio-preview";
     action.removeAttribute("target");
     action.removeAttribute("rel");
-    action.textContent = "PREVIEW ↗";
+    action.dataset.i18n = "previewArrow";
+    applyLanguage();
   }
 
   const format = seconds => Number.isFinite(seconds) && seconds >= 0
@@ -120,7 +216,8 @@ async function initPreview() {
     const isPlaying = !audio.paused && !audio.ended;
     toggle.classList.toggle("playing", isPlaying);
     toggle.setAttribute("aria-pressed", String(isPlaying));
-    toggle.setAttribute("aria-label", isPlaying ? "Pause BELLA preview" : "Play BELLA preview");
+    toggle.dataset.i18nAriaLabel = isPlaying ? "pauseBella" : "playBella";
+    toggle.setAttribute("aria-label", translate(toggle.dataset.i18nAriaLabel));
     $("audio-current").textContent = format(audio.currentTime);
     $("audio-total").textContent = format(audio.duration);
     $("audio-progress-bar").style.width = Number.isFinite(audio.duration) && audio.duration > 0 ? `${Math.min(100, audio.currentTime / audio.duration * 100)}%` : "0%";
@@ -143,8 +240,10 @@ function cleanReferralUrl() {
 
 function init() {
   cleanReferralUrl();
+  initLanguage();
   initPlatforms();
   initReleaseStatus();
+  applyLanguage();
   initReveal();
   initPreview();
 }
