@@ -23,15 +23,20 @@
   <title>MARKO — Official Music Website</title>
 </head>
 <body>
-  <a class="skip-link" href="#main">Skip to content</a>
+  <a class="skip-link" href="#main" data-i18n="skip">Skip to content</a>
   <header class="site-header" id="top">
-    <a class="brand-wordmark" href="#top" aria-label="MARKO — Back to top">MARKO<span class="brand-dot">.</span></a>
-    <nav class="site-nav" aria-label="Main navigation">
-      <a href="#latest-releases">RELEASES</a>
-      <a class="nav-instagram" href="https://www.instagram.com/heymarkomusic/" target="_blank" rel="noopener noreferrer" aria-label="MARKO on Instagram">
+    <a class="brand-wordmark" href="#top" aria-label="MARKO — Back to top" data-i18n-aria-label="backToTop">MARKO<span class="brand-dot">.</span></a>
+    <nav class="site-nav" aria-label="Main navigation" data-i18n-aria-label="mainNav">
+      <a href="#latest-releases" data-i18n="navReleases">RELEASES</a>
+      <a class="nav-instagram" href="https://www.instagram.com/heymarkomusic/" target="_blank" rel="noopener noreferrer" aria-label="MARKO on Instagram" data-i18n-aria-label="instagramLabel">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.7" cy="6.5" r=".9" fill="currentColor" stroke="none"/></svg>
         <span>INSTAGRAM</span>
       </a>
+      <div class="language-switcher" role="group" aria-label="Choose website language" data-i18n-aria-label="languageLabel">
+        <button type="button" class="language-choice is-active" data-lang="en" lang="en" aria-pressed="true" aria-label="English">EN</button>
+        <button type="button" class="language-choice" data-lang="es" lang="es" aria-pressed="false" aria-label="Español">ES</button>
+        <button type="button" class="language-choice" data-lang="ca" lang="ca" aria-pressed="false" aria-label="Català">CA</button>
+      </div>
     </nav>
   </header>
 
@@ -42,31 +47,31 @@
       <div class="hero-orbit" aria-hidden="true"></div>
       <div class="hero-inner">
         <div class="hero-copy fade-up">
-          <p class="eyebrow hero-eyebrow"><span class="eyebrow-line"></span> THE OFFICIAL WEBSITE</p>
-          <h1 id="artist-title">MARKO<span>.</span></h1>
+          <p class="eyebrow hero-eyebrow"><span class="eyebrow-line"></span><span data-i18n="officialWebsite">THE OFFICIAL WEBSITE</span></p>
+          <h1 id="artist-title" class="kinetic-title" aria-label="MARKO"><span class="kinetic-letters" aria-hidden="true"><span class="kinetic-letter" style="--letter:0">M</span><span class="kinetic-letter" style="--letter:1">A</span><span class="kinetic-letter" style="--letter:2">R</span><span class="kinetic-letter" style="--letter:3">K</span><span class="kinetic-letter" style="--letter:4">O</span></span><span class="kinetic-dot" aria-hidden="true">.</span></h1>
           <p class="hero-motto">Freedom <i>/</i> Love <i>/</i> Try &amp; Fail</p>
           <div class="hero-actions">
-            <a class="action-link action-link--ivory" href="#latest-releases">EXPLORE MUSIC <span aria-hidden="true">↗</span></a>
+            <a class="action-link action-link--ivory" href="#latest-releases"><span class="action-caption" data-i18n="exploreMusic">EXPLORE MUSIC</span> <span aria-hidden="true">↗</span></a>
             <span class="hero-release-note">BELLA <em>—</em> 30.11.2026</span>
           </div>
         </div>
-        <div class="hero-foot" aria-hidden="true"><span>MARKO / 2026</span><span>SCROLL TO DISCOVER ↓</span></div>
+        <div class="hero-foot" aria-hidden="true"><span>MARKO / 2026</span><span data-i18n="scrollDiscover">SCROLL TO DISCOVER ↓</span></div>
       </div>
     </section>
 
     <section class="platform-strip" aria-label="Music platforms">
       <div class="platform-inner">
-        <p class="platform-intro">MUSIC PLATFORMS <span>·</span> LINKS COMING SOON</p>
+        <p class="platform-intro" data-i18n="platformIntro">MUSIC PLATFORMS · LINKS COMING SOON</p>
         <div class="platforms" id="platforms">
-          <span class="platform" data-service="spotify" aria-label="Spotify — coming soon">
+          <span class="platform" data-service="spotify" aria-label="Spotify — coming soon" data-i18n-aria-label="spotifySoon">
             <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2Zm4.59 14.63a.62.62 0 0 1-.854.206c-2.341-1.429-5.29-1.75-8.765-.958a.62.62 0 1 1-.276-1.209c3.796-.866 7.06-.496 9.69 1.111a.62.62 0 0 1 .205.848Zm1.229-2.733a.776.776 0 0 1-1.066.255c-2.681-1.647-6.77-2.122-9.942-1.16a.776.776 0 1 1-.45-1.485c3.625-1.099 8.13-.57 11.203 1.32a.775.775 0 0 1 .255 1.07Zm.106-2.846c-3.216-1.91-8.525-2.085-11.595-1.154a.931.931 0 1 1-.541-1.781c3.525-1.07 9.383-.864 13.086 1.334a.931.931 0 1 1-.95 1.601Z"/></svg>
             <span>Spotify</span>
           </span>
-          <span class="platform" data-service="appleMusic" aria-label="Apple Music — coming soon">
+          <span class="platform" data-service="appleMusic" aria-label="Apple Music — coming soon" data-i18n-aria-label="appleMusicSoon">
             <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.9 2.7c.64-.13 1.12.22 1.12.9v13.07c0 2.03-1.46 3.68-3.72 3.68-1.85 0-3.03-1.1-3.03-2.53 0-1.48 1.31-2.59 3.19-2.59.58 0 1.17.1 1.72.28V7.36l-8.2 1.8v9.05c0 2.01-1.48 3.72-3.77 3.72-1.84 0-3.04-1.09-3.04-2.54 0-1.48 1.36-2.62 3.19-2.62.62 0 1.17.1 1.75.3V5.76c0-.48.3-.84.78-.95L17.9 2.7Z"/></svg>
             <span>Apple Music</span>
           </span>
-          <span class="platform" data-service="soundcloud" aria-label="SoundCloud — coming soon">
+          <span class="platform" data-service="soundcloud" aria-label="SoundCloud — coming soon" data-i18n-aria-label="soundcloudSoon">
             <svg viewBox="0 0 36 24" fill="currentColor" aria-hidden="true"><path d="M1 13h2v8H1zm4-3h2v11H5zm4-3h2v14H9zm4-1.5h2v15.5h-2zm4-1.5h2v17h-2zm4 0h2v17h-2zm4 5a7 7 0 0 1 10.8 5.5 4.25 4.25 0 0 1-.55 8.5H25V9Z"/></svg>
             <span>SoundCloud</span>
           </span>
@@ -78,9 +83,9 @@
       <div class="releases-atmosphere" aria-hidden="true"></div>
       <div class="section-wrap">
         <div class="section-heading reveal-on-scroll">
-          <div class="section-counter"><span>01</span><span class="counter-line"></span> MUSIC</div>
-          <h2 id="releases-title">LATEST <em>RELEASES</em><span class="section-point">.</span></h2>
-          <p>MARKO / DISCOGRAPHY</p>
+          <div class="section-counter"><span>01</span><span class="counter-line"></span> <span data-i18n="music">MUSIC</span></div>
+          <h2 id="releases-title" class="animated-headline"><span class="headline-word" data-i18n="latest">LATEST</span> <em class="headline-word" data-i18n="releases">RELEASES</em><span class="section-point">.</span></h2>
+          <p data-i18n="discography">MARKO / DISCOGRAPHY</p>
         </div>
 
         <div class="release-grid">
@@ -88,13 +93,13 @@
             <div class="bella-backdrop" aria-hidden="true"></div>
             <div class="bella-shade" aria-hidden="true"></div>
             <div class="card-body">
-              <div class="card-topline"><span>01 / SINGLE</span><span class="card-decor" aria-hidden="true">✳</span></div>
+              <div class="card-topline"><span data-i18n="cardSingle">01 / SINGLE</span><span class="card-decor" aria-hidden="true">✳</span></div>
               <div class="bella-artwork-frame"><img src="./assets/bella-cover.webp" alt="BELLA official cover artwork — MARKO" loading="lazy" decoding="async" width="1179" height="1179"></div>
               <div class="release-info">
-                <p class="release-class">NEW SINGLE</p>
+                <p class="release-class" data-i18n="newSingle">NEW SINGLE</p>
                 <h3 id="bella-title">BELLA</h3>
                 <div class="release-bottomline"><span>MARKO</span><span>30.11.2026</span></div>
-                <div class="release-card-footer"><span class="release-availability" id="bella-status">COMING SOON</span><a href="#audio-preview" id="bella-audio-anchor" class="release-card-link" hidden>PREVIEW ↗</a></div>
+                <div class="release-card-footer"><span class="release-availability" id="bella-status" data-i18n="comingSoon">COMING SOON</span><a href="#audio-preview" id="bella-audio-anchor" class="release-card-link" data-i18n="previewArrow" hidden>PREVIEW ↗</a></div>
               </div>
             </div>
           </article>
@@ -103,13 +108,13 @@
             <div class="ep-detail ep-detail--one" aria-hidden="true"></div>
             <div class="ep-detail ep-detail--two" aria-hidden="true"></div>
             <div class="card-body">
-              <div class="card-topline"><span>02 / EP</span><span class="ep-year">MARKO © 2026</span></div>
+              <div class="card-topline"><span data-i18n="cardEp">02 / EP</span><span class="ep-year">MARKO © 2026</span></div>
               <div class="ep-artless" aria-hidden="true"><span>SO</span><span>L</span><i class="ep-spark">✳</i></div>
               <div class="release-info ep-info">
-                <p class="release-class">UPCOMING EP</p>
+                <p class="release-class" data-i18n="upcomingEp">UPCOMING EP</p>
                 <h3 id="ep-title">Show Off,<br><em>Love</em><span class="ep-period">.</span></h3>
-                <div class="release-bottomline"><span>MARKO</span><span>RELEASE DATE: TBD</span></div>
-                <div class="release-card-footer"><span class="release-availability">IN THE MAKING</span><span class="release-ep-note">NO ARTWORK YET</span></div>
+                <div class="release-bottomline"><span>MARKO</span><span data-i18n="epDate">RELEASE DATE: TBD</span></div>
+                <div class="release-card-footer"><span class="release-availability" data-i18n="inMaking">IN THE MAKING</span><span class="release-ep-note" data-i18n="noArtwork">NO ARTWORK YET</span></div>
               </div>
             </div>
           </article>
@@ -119,9 +124,9 @@
 
     <section class="audio-section" id="audio-preview" hidden aria-labelledby="preview-title">
       <div class="audio-inner">
-        <div class="audio-intro"><p class="eyebrow">LISTEN FIRST</p><h2 id="preview-title">BELLA <em>PREVIEW</em></h2></div>
+        <div class="audio-intro"><p class="eyebrow" data-i18n="listenFirst">LISTEN FIRST</p><h2 id="preview-title">BELLA <em data-i18n="preview">PREVIEW</em></h2></div>
         <div class="audio-player" id="audio-player">
-          <button type="button" id="audio-toggle" class="audio-toggle" aria-label="Play BELLA preview" aria-pressed="false"><span class="play-shape" aria-hidden="true"></span><span class="pause-shape" aria-hidden="true"></span></button>
+          <button type="button" id="audio-toggle" class="audio-toggle" aria-label="Play BELLA preview" data-i18n-aria-label="playBella" aria-pressed="false"><span class="play-shape" aria-hidden="true"></span><span class="pause-shape" aria-hidden="true"></span></button>
           <div class="audio-track-info"><div class="audio-track-name"><b>BELLA</b><span>MARKO</span></div><div class="audio-progress" id="audio-progress"><div id="audio-progress-bar"></div></div><div class="audio-times"><span id="audio-current">0:00</span><span id="audio-total">0:00</span></div></div>
           <audio id="bella-audio" preload="metadata"></audio>
         </div>
@@ -131,10 +136,10 @@
 
   <footer class="site-footer">
     <div class="footer-inner">
-      <a href="#top" class="footer-wordmark" aria-label="MARKO — back to top">MARKO<span>.</span></a>
+      <a href="#top" class="footer-wordmark" aria-label="MARKO — back to top" data-i18n-aria-label="backToTop">MARKO<span>.</span></a>
       <p>Freedom | Love | Try &amp; Fail</p>
-      <a class="footer-contact" href="mailto:hello@markomusic.art" aria-label="Email MARKO at hello@markomusic.art">
-        <span class="footer-contact-label">CONTACT</span>
+      <a class="footer-contact" href="mailto:hello@markomusic.art" aria-label="Email MARKO at hello@markomusic.art" data-i18n-aria-label="emailMarko">
+        <span class="footer-contact-label" data-i18n="contact">CONTACT</span>
         <span class="footer-contact-email">hello@markomusic.art <span aria-hidden="true">↗</span></span>
       </a>
       <div class="footer-base"><a href="https://www.instagram.com/heymarkomusic/" target="_blank" rel="noopener noreferrer">@heymarkomusic ↗</a><span>© 2026 MARKO</span></div>
