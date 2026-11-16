@@ -82,7 +82,7 @@ a{color:inherit;text-decoration:none}button{font:inherit}img,svg{display:block}a
 @media(prefers-reduced-motion:no-preference){
   .hero-copy .kinetic-letter{
     animation:markoLetterRise 1.05s cubic-bezier(.16,1,.25,1) both;
-    animation-delay:calc(.27s + var(--letter) * 85ms);
+    animation-delay:var(--delay, .35s);
   }
   .hero-copy .kinetic-dot{animation:markoDot 1.15s var(--ease) .82s both}
   .hero-copy .kinetic-title::after{animation:markoUnderline 1.2s var(--ease) 1s both}
