@@ -95,9 +95,9 @@ function applyLanguage(code = activeLanguage) {
 function initLanguage() {
   let saved = null;
   try { saved = window.localStorage.getItem("marko-language"); } catch {}
-  const browser = (navigator.languages || [navigator.language || "en"])
+  const browser = (navigator.languages?.length ? navigator.languages : [navigator.language || "en"])
     .map(language => String(language).toLowerCase().split("-")[0])
-    .find(language => language === "ca" || language === "es");
+    .find(language => Object.hasOwn(I18N, language));
   applyLanguage(saved && Object.hasOwn(I18N,saved) ? saved : (browser || "en"));
 
   document.querySelectorAll(".language-choice").forEach(button => {
