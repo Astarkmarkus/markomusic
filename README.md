@@ -1,4 +1,4 @@
-# MARKO — Official Music Website (V2)
+# MARKO — Official Music Website (V2.1)
 
 A mobile-first one-page artist website for **MARKO** at `markomusic.art` (GitHub Pages).
 
@@ -9,7 +9,9 @@ A mobile-first one-page artist website for **MARKO** at `markomusic.art` (GitHub
 - **Latest Releases** editorial section with a softly blurred artist portrait in the background.
 - **BELLA** single: official cover artwork with blurred cover backdrop, release date 30.11.2026.
 - **Show Off, Love**: EP card on the right on desktop, release date TBD, deliberately **no EP artwork**.
-- Mobile-first responsive layout, hover/reveal animations, reduced motion accessibility.
+- Mobile-first responsive layout, kinetic headline animations, scroll reveals and reduced-motion accessibility.
+- Interface translations: **English, Español, Català** with accessible EN/ES/CA switching in the navigation.
+- The Contact section links to **hello@markomusic.art** in an editorial serif style.
 - Artist-provided media only; no trackers, analytics, user accounts, backend or cookie banners.
 
 ## Deployment
@@ -48,3 +50,12 @@ The two WEBP images in the project are optimized copies of the images supplied b
 ## Domain
 
 The `CNAME` file points to `markomusic.art`. Keep the DNS records for this domain at the authoritative provider (currently Porkbun); do not change DNS for `onyx45.com`. See GitHub Pages settings for any pending DNS check and HTTPS activation.
+## Language settings
+
+Choose **EN**, **ES** or **CA** in the header. The site also selects a supported browser language when no explicit choice is saved. A visitor's selected language is saved locally under `marko-language` in browser localStorage (not a tracking cookie). The switch changes visible UI labels, release statuses and accessibility labels without reloading. The artist's name, release titles and music remain unchanged.
+
+To edit translations, update the `I18N` object in `script.js`. Headline motion is CSS-driven, and `prefers-reduced-motion` disables it.
+
+## Contact
+
+The footer's `mailto:hello@markomusic.art` opens the visitor's email application; receiving mail requires the address and MX/DNS records to be configured with the email provider. This website does not collect email addresses.
