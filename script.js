@@ -1,194 +1,143 @@
 "use strict";
 
-/**
- * MARKO release settings.
- *
- * Release day DOES NOT automatically publish streaming links.
- * After distribution is confirmed, set status to "out-now" and paste
- * the actual official streaming URLs below.
- *
- * To replace BELLA with a future release, update the release fields
- * and the corresponding approved page copy/visual assets.
- */
-const RELEASE = Object.freeze({
-  artist: "MARKO",
-  title: "BELLA",
-  releaseDate: "2026-11-30",
-  dateShort: "30.11.2026",
-  dateLong: "30 NOVEMBER 2026",
-  status: "coming-soon", // "coming-soon" | "out-now"
-  assets: {
-    cover: "./assets/bella-cover.webp",
-    portrait: "./assets/marko-portrait.webp",
+/** Add verified artist links when available; nothing is advertised as clickable before that. */
+const MARKO = Object.freeze({
+  bella: {
+    status: "coming-soon", // Manually change to "out-now" after distribution is confirmed
+    releaseDate: "2026-11-30",
+    preSaveUrl: "",
     preview: "./assets/bella-preview.mp3"
   },
-  streaming: {
+  platforms: {
     spotify: "",
-    appleMusic: ""
+    appleMusic: "",
+    soundcloud: ""
   }
 });
 
 const $ = (id) => document.getElementById(id);
-
-/** Updates repeated release labels from one configuration. */
-function applyReleaseCopy() {
-  const heroTitle = $("hero-title");
-  if (heroTitle?.firstChild) heroTitle.firstChild.textContent = RELEASE.title;
-  const heroDate = document.querySelector(".hero-release");
-  if (heroDate) heroDate.textContent = RELEASE.dateShort;
-  const headerDate = document.querySelector(".header-label");
-  if (headerDate && headerDate.lastChild) headerDate.lastChild.textContent = " " + RELEASE.dateShort;
-  const verticalDate = document.querySelector(".hero-vertical--right");
-  if (verticalDate) verticalDate.textContent = RELEASE.dateShort;
-  const bottomDate = document.querySelector(".hero-bottom span:last-child");
-  if (bottomDate) bottomDate.textContent = RELEASE.dateShort;
-  const fallbackDate = document.querySelector(".fallback-date");
-  if (fallbackDate) fallbackDate.textContent = RELEASE.dateShort;
-  const fallbackTitle = document.querySelector(".fallback-title");
-  if (fallbackTitle) fallbackTitle.textContent = RELEASE.title;
-  const releaseTitle = $("release-title");
-  if (releaseTitle) releaseTitle.textContent = RELEASE.title;
-  const dateLong = document.querySelector(".release-date-large");
-  if (dateLong) dateLong.textContent = RELEASE.dateLong;
-  const previewTitle = $("preview-title");
-  if (previewTitle) previewTitle.innerHTML = "";
-  if (previewTitle) {
-    previewTitle.append(document.createTextNode(RELEASE.title + " "));
-    const em = document.createElement("em");
-    em.textContent = "—";
-    previewTitle.append(em, document.createTextNode(" PREVIEW"));
-  }
-  const audioLabel = document.querySelector(".audio-line-one span:first-child");
-  if (audioLabel) audioLabel.textContent = RELEASE.title;
-  const heroStatus = $("hero-status");
-  if (heroStatus) {
-    heroStatus.replaceChildren(document.createTextNode(
-      RELEASE.status === "out-now" ? "OUT NOW " : "COMING SOON "
-    ));
-    const spark = document.createElement("span");
-    spark.className = "state-spark";
-    spark.setAttribute("aria-hidden", "true");
-    spark.textContent = "✳";
-    heroStatus.append(spark);
-  }
-}
-
-/** Never show broken images or unrelated stand-in portraits. */
-function attachApprovedImage(src, parent, className, alt) {
-  if (!parent || !src) return;
-  const image = new Image();
-  image.alt = alt;
-  image.className = className;
-  image.decoding = "async";
-  image.onload = () => {
-    if (image.naturalWidth === 0) return;
-    parent.append(image);
-    if (parent.id === "portrait-wrap") parent.hidden = false;
-  };
-  image.onerror = () => {};
-  image.src = src;
-}
-
-/** Only provide clickable platform links once the artist confirms release. */
-function populateStreamingLinks() {
-  const host = $("streaming-links");
-  if (!host || RELEASE.status !== "out-now") return;
-  const services = [
-    ["Spotify", RELEASE.streaming.spotify],
-    ["Apple Music", RELEASE.streaming.appleMusic]
-  ];
-  for (const [label, rawUrl] of services) {
-    if (!rawUrl) continue;
-    let url;
-    try { url = new URL(rawUrl); }
-    catch { continue; }
-    if (url.protocol !== "https:") continue;
-    const link = document.createElement("a");
-    link.className = "streaming-link";
-    link.href = url.href;
-    link.target = "_blank";
-    link.rel = "noopener noreferrer";
-    link.textContent = label;
-    host.append(link);
-  }
-  host.hidden = host.children.length === 0;
-}
-
-/** Audio remains silent and controls hidden until a real MP3 is available. */
-async function initAudio() {
-  const audio = $("preview-audio");
-  const play = $("play-button");
-  const widget = $("audio-widget");
-  const progress = $("audio-progress-fill");
-  const current = $("audio-time");
-  const duration = $("audio-duration");
-  if (!audio || !play || !widget || !progress || !current || !duration) return;
-
+const allowedUrl = (value) => {
+  if (!value) return null;
   try {
-    const result = await fetch(RELEASE.assets.preview, { method: "HEAD", cache: "no-store" });
-    if (!result.ok) return;
-    const contentType = result.headers.get("content-type") || "";
-    // GitHub Pages should serve .mp3 as audio/mpeg; some proxies use octet-stream.
-    if (contentType && !/audio\/|application\/octet-stream/i.test(contentType)) return;
-  } catch {
+    const url = new URL(value);
+    return url.protocol === "https:" ? url.href : null;
+  } catch { return null; }
+};
+
+function initPlatforms() {
+  let linked = 0;
+  for (const [service, value] of Object.entries(MARKO.platforms)) {
+    const url = allowedUrl(value);
+    const element = document.querySelector(`[data-service="${service}"]`);
+    if (!url || !element) continue;
+    const anchor = document.createElement("a");
+    anchor.className = "platform is-linked";
+    anchor.href = url;
+    anchor.target = "_blank";
+    anchor.rel = "noopener noreferrer";
+    anchor.setAttribute("aria-label", `${service === "appleMusic" ? "Apple Music" : service === "soundcloud" ? "SoundCloud" : "Spotify"} — MARKO`);
+    anchor.innerHTML = element.innerHTML;
+    element.replaceWith(anchor);
+    linked++;
+  }
+  const label = document.querySelector(".platform-intro");
+  if (label && linked > 0) {
+    label.textContent = linked === 3 ? "LISTEN TO MARKO" : "MUSIC PLATFORMS · MORE LINKS COMING SOON";
+  }
+}
+
+function initReleaseStatus() {
+  const label = $("bella-status");
+  const action = $("bella-audio-anchor");
+  if (!label || !action) return;
+  if (MARKO.bella.status === "out-now") {
+    label.textContent = "OUT NOW";
+    const link = allowedUrl(MARKO.platforms.spotify) || allowedUrl(MARKO.platforms.appleMusic) || allowedUrl(MARKO.platforms.soundcloud);
+    if (link) {
+      action.hidden = false;
+      action.href = link;
+      action.textContent = "LISTEN ↗";
+      action.target = "_blank";
+      action.rel = "noopener noreferrer";
+    }
+  } else {
+    const presave = allowedUrl(MARKO.bella.preSaveUrl);
+    if (presave) {
+      action.hidden = false;
+      action.href = presave;
+      action.textContent = "PRE-SAVE ↗";
+      action.target = "_blank";
+      action.rel = "noopener noreferrer";
+    }
+  }
+}
+
+function initReveal() {
+  const targets = document.querySelectorAll(".reveal-on-scroll");
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) {
+    targets.forEach(el => el.classList.add("is-visible"));
     return;
   }
-
-  audio.src = RELEASE.assets.preview;
-  audio.preload = "metadata";
-  play.hidden = false;
-
-  const mmss = (seconds) => {
-    if (!Number.isFinite(seconds) || seconds < 0) return "00:00";
-    const s = Math.floor(seconds);
-    return String(Math.floor(s / 60)).padStart(2, "0") + ":" + String(s % 60).padStart(2, "0");
-  };
-  const sync = () => {
-    const playing = !audio.paused && !audio.ended;
-    widget.classList.toggle("is-playing", playing);
-    play.classList.toggle("is-playing", playing);
-    play.setAttribute("aria-pressed", String(playing));
-    play.setAttribute("aria-label", playing ? "Pause BELLA preview" : "Play BELLA preview");
-    current.textContent = mmss(audio.currentTime);
-    duration.textContent = mmss(audio.duration);
-    const width = Number.isFinite(audio.duration) && audio.duration > 0
-      ? Math.min(100, (audio.currentTime / audio.duration) * 100) : 0;
-    progress.style.width = width + "%";
-  };
-  play.addEventListener("click", async () => {
-    if (!audio.paused) {
-      audio.pause();
-      return;
+  const observer = new IntersectionObserver((entries) => {
+    for (const entry of entries) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("is-visible");
+        observer.unobserve(entry.target);
+      }
     }
-    try { await audio.play(); }
-    catch { audio.pause(); sync(); }
-  });
-  for (const event of ["loadedmetadata","timeupdate","play","pause","ended"]) {
-    audio.addEventListener(event, sync);
+  }, { threshold: .12, rootMargin: "0px 0px 25px 0px" });
+  targets.forEach(el => observer.observe(el));
+}
+
+async function initPreview() {
+  const section = $("audio-preview");
+  const audio = $("bella-audio");
+  const toggle = $("audio-toggle");
+  if (!section || !audio || !toggle) return;
+
+  // Check for the artist's actual file. Never show a fake player or autoplay.
+  try {
+    const response = await fetch(MARKO.bella.preview, { method: "HEAD" });
+    if (!response.ok) return;
+    const type = response.headers.get("content-type") || "";
+    if (type && !/audio\/|application\/octet-stream/i.test(type)) return;
+  } catch { return; }
+
+  audio.src = MARKO.bella.preview;
+  section.hidden = false;
+  const action = $("bella-audio-anchor");
+  if (action && !MARKO.bella.preSaveUrl && MARKO.bella.status !== "out-now") {
+    action.hidden = false;
+    action.href = "#audio-preview";
+    action.removeAttribute("target");
+    action.removeAttribute("rel");
+    action.textContent = "PREVIEW ↗";
   }
-  audio.addEventListener("error", () => {
-    audio.pause();
-    play.hidden = true;
-    widget.classList.remove("is-playing");
+
+  const format = seconds => Number.isFinite(seconds) && seconds >= 0
+    ? `${Math.floor(seconds / 60)}:${String(Math.floor(seconds % 60)).padStart(2, "0")}` : "0:00";
+  const sync = () => {
+    const isPlaying = !audio.paused && !audio.ended;
+    toggle.classList.toggle("playing", isPlaying);
+    toggle.setAttribute("aria-pressed", String(isPlaying));
+    toggle.setAttribute("aria-label", isPlaying ? "Pause BELLA preview" : "Play BELLA preview");
+    $("audio-current").textContent = format(audio.currentTime);
+    $("audio-total").textContent = format(audio.duration);
+    $("audio-progress-bar").style.width = Number.isFinite(audio.duration) && audio.duration > 0 ? `${Math.min(100, audio.currentTime / audio.duration * 100)}%` : "0%";
+  };
+  toggle.addEventListener("click", async () => {
+    if (!audio.paused) { audio.pause(); return; }
+    try { await audio.play(); } catch { audio.pause(); }
   });
+  for (const eventName of ["loadedmetadata", "timeupdate", "play", "pause", "ended"]) audio.addEventListener(eventName, sync);
+  audio.addEventListener("error", () => { section.hidden = true; audio.pause(); });
 }
 
 function init() {
-  applyReleaseCopy();
-  populateStreamingLinks();
-  attachApprovedImage(
-    RELEASE.assets.cover, $("cover-frame"), "cover-official",
-    "Official cover artwork for BELLA by MARKO"
-  );
-  attachApprovedImage(
-    RELEASE.assets.portrait, $("portrait-wrap"), "portrait-official",
-    "Approved portrait of MARKO"
-  );
-  initAudio();
+  initPlatforms();
+  initReleaseStatus();
+  initReveal();
+  initPreview();
 }
-
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", init, { once: true });
-} else {
-  init();
-}
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init, { once: true });
+else init();
